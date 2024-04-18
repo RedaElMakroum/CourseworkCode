@@ -21,7 +21,11 @@ print(data.head())
 # InstalledCapacity = InstalledCapacity.iloc[:, -2:]
 # print(InstalledCapacity.transpose())
 
-data['Generation'] = data[['Solar','WindOnShore','WindOffShore','Hydro','HydroStorage','HydroPumpedStorage','Marine','Nuclear','Geothermal','Biomass','Waste','OtherRenewable','Lignite','Coal','Gas','CoalGas','Oil','ShaleOil','Peat','Other']].sum(axis=1)
+# All Sources
+# data['Generation'] = data[['Solar','WindOnShore','WindOffShore','Hydro','HydroStorage','HydroPumpedStorage','Marine','Nuclear','Geothermal','Biomass','Waste','OtherRenewable','Lignite','Coal','Gas','CoalGas','Oil','ShaleOil','Peat','Other']].sum(axis=1)
+# Renewable Sources
+data['Generation'] = data[['Solar','WindOnShore','WindOffShore','Hydro','HydroStorage','HydroPumpedStorage','Marine','OtherRenewable']].sum(axis=1)
+
 
 X = data[['Demand', 'Generation']]  # Predictor variables
 y = data['Price']  # Response variable
