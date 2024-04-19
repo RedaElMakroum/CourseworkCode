@@ -152,7 +152,7 @@ plt.title('Model 4-1: Summer Week')
 plt.grid(True, alpha=0.5)
 plt.legend()
 
-plt.tight_layout
+plt.tight_layout()
 plt.savefig("Figures\Task11Model4-1.svg", format='svg', bbox_inches='tight')
 
 

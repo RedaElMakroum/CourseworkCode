@@ -340,3 +340,6 @@ plt.grid(True)
 plt.tight_layout()
 plt.savefig("Figures\Task11Model3Compare7-11.svg", format='svg', bbox_inches='tight')
 
+
+print(beta_0_values)
+print(beta_1_values)
