@@ -33,6 +33,10 @@ results1_winter = model1_winter.fit()
 # print(results1_Summer.summary())
 # print(results1_Winter.summary())
 
+def generate_ticks_and_labels(data):
+    labels = [date if hour == 12 else "" for date, hour in zip(data['Time'].dt.strftime('%b %d'), data['Time'].dt.hour)]
+    ticks = range(len(labels))
+    return ticks, labels
 
 WinterWeek = df.iloc[2209:2376] # 1 week of data in winter from 1 Jan to 7 Jan
 SummerWeek = df.iloc[7321:7488] # 1 week of data in summer from 1 Aug to 7 Aug
@@ -49,6 +53,16 @@ X1_SummerWeek = sm.add_constant(X1_SummerWeek)
 Y_SummerWeek = SummerWeek['Demand']
 predictions1_SummerWeek = results1_summer.predict(X1_SummerWeek)
 
+print(WinterWeek)
+# Ensure that 'Time' column is of datetime type
+WinterWeek['Time'] = pd.to_datetime(WinterWeek['Time'])
+
+# Convert 'Time' column to "Mon Day" format and store it
+WinterWeekDays = WinterWeek['Time'].dt.strftime('%b %d')
+WinterWeekDays = WinterWeekDays.loc[WinterWeek['Time'].dt.hour == 0]
+
+W_ticks, W_labels = generate_ticks_and_labels(WinterWeek)
+S_ticks, S_labels = generate_ticks_and_labels(SummerWeek)
 #Model 2
 
 # Define the dependent variable and the independent variables for summer
@@ -111,36 +125,43 @@ plt.legend()
 # Plot for Model1 winter week
 plt.figure(figsize=(20, 10))
 plt.subplot(2, 2, 1)
-plt.plot(WinterWeek.index, Y_WinterWeek, label='Actual')
-plt.plot(WinterWeek.index, predictions1_WinterWeek, color='red', label='Predicted')
-plt.xlabel('Date')
+plt.plot(range(len(Y_WinterWeek)), Y_WinterWeek, label='Actual')
+plt.plot(range(len(Y_WinterWeek)), predictions1_WinterWeek, color='red', label='Predicted')
+plt.xticks(W_ticks, W_labels)
+plt.tick_params(axis='x', length=0)
 plt.ylabel('Demand')
 plt.title('Model 1 Winter: Winter Week')
 plt.legend()
 
 # Plot for Model1 summer week
 plt.subplot(2, 2, 2)
-plt.plot(SummerWeek.index, Y_SummerWeek, label='Actual')
-plt.plot(SummerWeek.index, predictions1_SummerWeek, color='red', label='Predicted')
-plt.xlabel('Date')
+plt.plot(range(len(Y_SummerWeek)), Y_SummerWeek, label='Actual')
+plt.plot(range(len(Y_SummerWeek)), predictions1_SummerWeek, color='red', label='Predicted')
+plt.xticks(S_ticks, S_labels)
+plt.tick_params(axis='x', length=0)
+
 plt.ylabel('Demand')
 plt.title('Model 1 Summer: Summer Week')
 plt.legend()
 
 # Plot for Model2 for winter: winter week
 plt.subplot(2, 2, 3)
-plt.plot(WinterWeek.index, Y_WinterWeek, label='Actual')
-plt.plot(WinterWeek.index, predictions2_WinterWeek, color='red', label='Predicted')
-plt.xlabel('Date')
+plt.plot(range(len(Y_WinterWeek)), Y_WinterWeek, label='Actual')
+plt.plot(range(len(Y_WinterWeek)), predictions2_WinterWeek, color='red', label='Predicted')
+plt.xticks(W_ticks, W_labels)
+plt.tick_params(axis='x', length=0)
+
 plt.ylabel('Demand')
 plt.title('Model 2 for winter: Winter Week')
 plt.legend()
 
 # Plot for Model2 for summer: summer week
 plt.subplot(2, 2, 4)
-plt.plot(SummerWeek.index, Y_SummerWeek, label='Actual')
-plt.plot(SummerWeek.index, predictions2_SummerWeek, color='red', label='Predicted')
-plt.xlabel('Date')
+plt.plot(range(len(Y_SummerWeek)), Y_SummerWeek, label='Actual')
+plt.plot(range(len(Y_SummerWeek)), predictions2_SummerWeek, color='red', label='Predicted')
+plt.xticks(S_ticks, S_labels)
+plt.tick_params(axis='x', length=0)
+
 plt.ylabel('Demand')
 plt.title('Model 2 for summer: Summer Week')
 plt.legend()
