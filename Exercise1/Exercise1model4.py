@@ -31,8 +31,8 @@ model1_winter = sm.OLS(Y_winter, X_winter)
 results1_winter = model1_winter.fit()
 
 
-# print(results1_Summer.summary())
-# print(results1_Winter.summary())
+# print(results1_summer.summary())
+# print(results1_winter.summary())
 
 def generate_ticks_and_labels(data):
     labels = [date if hour == 12 else None for date, hour in zip(data['Time'].dt.strftime('%b %d'), data['Time'].dt.hour)]
@@ -87,8 +87,8 @@ results2_summer = model2_summer.fit()
 model2_winter = sm.OLS(Y2_winter, X2_winter)
 results2_winter = model2_winter.fit()
 
-# print(results2_Summer.summary())
-# print(results2_Winter.summary())
+print(results2_summer.summary())
+print(results2_winter.summary())
 
 
 # Model 2
