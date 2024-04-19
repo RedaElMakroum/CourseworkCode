@@ -1,7 +1,8 @@
 import pandas as pd
 import statsmodels.api as sm
 import matplotlib.pyplot as plt
-plt.rcParams.update({'font.size': 8})
+plt.rcParams.update({'font.size': 15})
+plt.rcParams["font.family"] = "Times New Roman"
 
 # Load data from Excel file
 df = pd.read_excel('Exercise1Data.xlsx')
@@ -34,7 +35,7 @@ results1_winter = model1_winter.fit()
 # print(results1_Winter.summary())
 
 def generate_ticks_and_labels(data):
-    labels = [date if hour == 12 else "" for date, hour in zip(data['Time'].dt.strftime('%b %d'), data['Time'].dt.hour)]
+    labels = [date if hour == 12 else None for date, hour in zip(data['Time'].dt.strftime('%b %d'), data['Time'].dt.hour)]
     ticks = range(len(labels))
     return ticks, labels
 
@@ -63,6 +64,7 @@ WinterWeekDays = WinterWeekDays.loc[WinterWeek['Time'].dt.hour == 0]
 
 W_ticks, W_labels = generate_ticks_and_labels(WinterWeek)
 S_ticks, S_labels = generate_ticks_and_labels(SummerWeek)
+
 #Model 2
 
 # Define the dependent variable and the independent variables for summer
@@ -104,84 +106,100 @@ predictions2_SummerWeek = results2_summer.predict(X2_SummerWeek)
 
 
 # Plot for Model1 summer
-plt.figure(figsize=(16, 6))
-plt.subplot(1, 2, 1)
-plt.scatter(df_summer['Temp'], Y_summer, label='Data')
-plt.plot(df_summer['Temp'], results1_summer.fittedvalues, color='red', label='OLS')
-plt.xlabel('Temp')
-plt.ylabel('Demand')
-plt.title('Model 1 Summer: Demand vs Temp')
-plt.legend()
+# plt.figure(figsize=(16, 6))
+# plt.subplot(2, 1, 1)
+# plt.scatter(range(len(Y_summer)), Y_summer, label='Data')
+# plt.plot(range(len(Y_summer)), results1_summer.fittedvalues, color='red', label='OLS')
+# plt.xlabel('Temp')
+# plt.ylabel('Demand')
+# plt.title('Model 1 Summer: Demand vs Temp')
+# plt.legend()
 
-# Plot for Model1 winter
-plt.subplot(1, 2, 2)
-plt.scatter(df_winter['Temp'], Y_winter, label='Data')
-plt.plot(df_winter['Temp'], results1_winter.fittedvalues, color='blue', label='OLS')
-plt.xlabel('Temp')
-plt.ylabel('Demand')
-plt.title('Model 1 Winter: Demand vs Temp')
-plt.legend()
+# # Plot for Model1 winter
+# plt.subplot(2, 1, 2)
+# plt.scatter(df_winter['Temp'], Y_winter, label='Data')
+# plt.plot(df_winter['Temp'], results1_winter.fittedvalues, color='blue', label='OLS')
+# plt.xlabel('Temp')
+# plt.ylabel('Demand')
+# plt.title('Model 1 Winter: Demand vs Temp')
+# plt.legend()
 
 # Plot for Model1 winter week
-plt.figure(figsize=(20, 10))
-plt.subplot(2, 2, 1)
-plt.plot(range(len(Y_WinterWeek)), Y_WinterWeek, label='Actual')
-plt.plot(range(len(Y_WinterWeek)), predictions1_WinterWeek, color='red', label='Predicted')
-plt.xticks(W_ticks, W_labels)
+plt.close('all')
+plt.figure(figsize=(16, 6))
+plt.subplot(2, 1, 1)
+plt.plot(range(len(Y_WinterWeek)), Y_WinterWeek, label='Actual',color='grey')
+plt.plot(range(len(Y_WinterWeek)), predictions1_WinterWeek, color='blue', label='Predicted')
+W_ticks_reduced = [tick for tick, label in zip(W_ticks, W_labels) if label is not None]
+W_labels_reduced = [label for label in W_labels if label is not None]
 plt.tick_params(axis='x', length=0)
-plt.ylabel('Demand')
-plt.title('Model 1 Winter: Winter Week')
+plt.xticks(W_ticks_reduced, W_labels_reduced)
+plt.ylabel('Demand (MW)')
+plt.title('Model 4-1: Winter Week')
+plt.grid(True, alpha=0.5)
 plt.legend()
 
 # Plot for Model1 summer week
-plt.subplot(2, 2, 2)
-plt.plot(range(len(Y_SummerWeek)), Y_SummerWeek, label='Actual')
-plt.plot(range(len(Y_SummerWeek)), predictions1_SummerWeek, color='red', label='Predicted')
-plt.xticks(S_ticks, S_labels)
+plt.subplot(2, 1, 2)
+plt.plot(range(len(Y_SummerWeek)), Y_SummerWeek, label='Actual', color='grey')
+plt.plot(range(len(Y_SummerWeek)), predictions1_SummerWeek, color='blue', label='Predicted')
+S_ticks_reduced = [tick for tick, label in zip(S_ticks, S_labels) if label is not None]
+S_labels_reduced = [label for label in S_labels if label is not None]
+plt.xticks(S_ticks_reduced, S_labels_reduced)
 plt.tick_params(axis='x', length=0)
-
-plt.ylabel('Demand')
-plt.title('Model 1 Summer: Summer Week')
+plt.ylabel('Demand (MW)')
+plt.title('Model 4-1: Summer Week')
+plt.grid(True, alpha=0.5)
 plt.legend()
 
-# Plot for Model2 for winter: winter week
-plt.subplot(2, 2, 3)
-plt.plot(range(len(Y_WinterWeek)), Y_WinterWeek, label='Actual')
-plt.plot(range(len(Y_WinterWeek)), predictions2_WinterWeek, color='red', label='Predicted')
-plt.xticks(W_ticks, W_labels)
-plt.tick_params(axis='x', length=0)
+plt.tight_layout
+plt.savefig("Figures\Task11Model4-1.svg", format='svg', bbox_inches='tight')
 
-plt.ylabel('Demand')
-plt.title('Model 2 for winter: Winter Week')
+
+# Plot for Model2 for winter: winter week
+plt.close('all')
+plt.figure(figsize=(16, 6))
+plt.subplot(2, 1, 1)
+plt.plot(range(len(Y_WinterWeek)), Y_WinterWeek, label='Actual', color='grey')
+plt.plot(range(len(Y_WinterWeek)), predictions2_WinterWeek, color='blue', label='Predicted')
+plt.xticks(W_ticks_reduced, W_labels_reduced)
+plt.tick_params(axis='x', length=0)
+plt.ylabel('Demand (MW)')
+plt.title('Model 4-2: Winter Week')
+plt.grid(True, alpha=0.5)
 plt.legend()
 
 # Plot for Model2 for summer: summer week
-plt.subplot(2, 2, 4)
-plt.plot(range(len(Y_SummerWeek)), Y_SummerWeek, label='Actual')
-plt.plot(range(len(Y_SummerWeek)), predictions2_SummerWeek, color='red', label='Predicted')
-plt.xticks(S_ticks, S_labels)
+plt.subplot(2, 1, 2)
+plt.plot(range(len(Y_SummerWeek)), Y_SummerWeek, label='Actual', color='grey')
+plt.plot(range(len(Y_SummerWeek)), predictions2_SummerWeek, color='blue', label='Predicted')
+plt.xticks(S_ticks_reduced, S_labels_reduced)
 plt.tick_params(axis='x', length=0)
-
-plt.ylabel('Demand')
-plt.title('Model 2 for summer: Summer Week')
+plt.ylabel('Demand (MW)')
+plt.title('Model 4-2: Summer Week')
+plt.grid(True, alpha=0.5)
 plt.legend()
 
-# Plot for Model2 summer
-plt.figure(figsize=(16, 6))
-plt.subplot(1, 2, 1)
-plt.scatter(Y2_summer, results2_summer.fittedvalues)
-plt.plot([Y2_summer.min(), Y2_summer.max()], [Y2_summer.min(), Y2_summer.max()], color='red')
-plt.xlabel('Actual')
-plt.ylabel('Predicted')
-plt.title('Model 2 Summer: Actual vs Predicted')
-plt.legend()
+plt.tight_layout()
+plt.savefig("Figures\Task11Model4-2.svg", format='svg', bbox_inches='tight')
 
-# Plot for Model2 winter
-plt.subplot(1, 2, 2)
-plt.scatter(Y2_winter, results2_winter.fittedvalues)
-plt.plot([Y2_winter.min(), Y2_winter.max()], [Y2_winter.min(), Y2_winter.max()], color='blue')
-plt.xlabel('Actual')
-plt.ylabel('Predicted')
-plt.title('Model 2 Winter: Actual vs Predicted')
-plt.legend()
-plt.show()
+
+# # Plot for Model2 summer
+# plt.figure(figsize=(16, 6))
+# plt.subplot(1, 2, 1)
+# plt.scatter(Y2_summer, results2_summer.fittedvalues)
+# plt.plot([Y2_summer.min(), Y2_summer.max()], [Y2_summer.min(), Y2_summer.max()], color='red')
+# plt.xlabel('Actual')
+# plt.ylabel('Predicted')
+# plt.title('Model 2 Summer: Actual vs Predicted')
+# plt.legend()
+
+# # Plot for Model2 winter
+# plt.subplot(1, 2, 2)
+# plt.scatter(Y2_winter, results2_winter.fittedvalues)
+# plt.plot([Y2_winter.min(), Y2_winter.max()], [Y2_winter.min(), Y2_winter.max()], color='blue')
+# plt.xlabel('Actual')
+# plt.ylabel('Predicted')
+# plt.title('Model 2 Winter: Actual vs Predicted')
+# plt.legend()
+# plt.show()

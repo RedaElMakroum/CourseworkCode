@@ -133,7 +133,6 @@ plt.grid(True, alpha=0.5)
 plt.legend()
 
 plt.tight_layout()
-# plt.show()
 plt.savefig("Figures\Task11Model1.svg", format='svg', bbox_inches='tight')
 
 
