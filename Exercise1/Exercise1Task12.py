@@ -1,8 +1,10 @@
 import pandas as pd
+import numpy as np
 import statsmodels.api as sm
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
-plt.rcParams.update({'font.size': 8})
+plt.rcParams.update({'font.size': 10})
+plt.rcParams["font.family"] = "Times New Roman"
 
 dates = pd.date_range(start='1-1-2020', end='12-31-2020')
 
@@ -43,15 +45,21 @@ data['Time'] = pd.to_datetime(data['Time'])
 # Plotting the observed vs predicted prices
 plt.figure(figsize=(10, 5))
 predicted_prices = model.predict(X)
-plt.plot(data['Time'], y, label='Actual Prices')
-plt.plot(data['Time'], predicted_prices,'--', label='Predicted Prices')
-plt.xlabel('Time')
+plt.plot(data['Time'], y, label='Actual Prices', color='grey', linewidth=0.5)
+plt.plot(data['Time'], predicted_prices, label='Predicted Prices', color='blue', linewidth=0.5)
 plt.ylabel('Electricity Price (EUR/MWh)')
 plt.title('Actual vs Predicted Electricity Prices')
 
 # Set xticks as dates
 plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%b %Y'))
 plt.gca().xaxis.set_major_locator(mdates.MonthLocator())
+plt.xticks(rotation=30)
+# Set specific y-ticks
+yticks = np.linspace(y.min(), y.max(), num=5)  
+
+# Add grid
+plt.grid(True, alpha=0.5)
 
 plt.legend()
-plt.show()
+# plt.show()
+plt.savefig("Figures\Task12.svg", format='svg', bbox_inches='tight')
