@@ -29,6 +29,11 @@ results1 = model1.fit()
 model2 = sm.OLS(Y, X2)
 results2 = model2.fit()
 
+
+PD1 = results1.predict(X1)  # Predict using X2 model
+PD2 = results2.predict(X2)  # Predict using X2 model
+
+
 # print(results1.summary())
 # print(results2.summary())
 
@@ -339,3 +344,17 @@ plt.grid(True)
 
 plt.tight_layout()
 plt.savefig("Figures\Task11Model3Compare7-11.svg", format='svg', bbox_inches='tight')
+
+
+# Demand vs temperature scatterplot for model 1
+
+plt.close('all')
+plt.figure(figsize=(8, 6))
+plt.scatter(df['Temp'], df['Demand'], label='Demand',color='grey')
+plt.plot(df['Temp'], PD1, label='Model 1', color='tab:red')
+plt.scatter(df['Temp'], PD2, label='Model 2', facecolors='none', edgecolors='tab:blue', linewidths=0.5)
+plt.xlabel('Temperature (°C)')
+plt.ylabel('Demand (MW)')
+plt.legend()
+plt.title('Modeled Demand vs Temperature')
+plt.savefig("Figures\Task11ModelScatterPlot.svg", format='svg', bbox_inches='tight')
