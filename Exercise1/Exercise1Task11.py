@@ -349,7 +349,7 @@ plt.savefig("Figures\Task11Model3Compare7-11.svg", format='svg', bbox_inches='ti
 # Demand vs temperature scatterplot for model 1
 
 plt.close('all')
-plt.figure(figsize=(8, 6))
+plt.figure(figsize=(16, 6))
 plt.scatter(df['Temp'], df['Demand'], label='Demand',color='grey')
 plt.plot(df['Temp'], PD1, label='Model 1', color='tab:red')
 plt.scatter(df['Temp'], PD2, label='Model 2', facecolors='none', edgecolors='tab:blue', linewidths=0.5)
