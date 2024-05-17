@@ -9,9 +9,9 @@ T = 24
 timesteps = np.arange(T)
 
 c_CO2 = 0 # EUR/tCO2
-emissions_variable = np.zeros(10)
+emissions_variable = np.zeros(20)
 
-for i in range(1, 11):
+for i in range(1, 21):
     c_CO2 = - 10 + i*10
     # Note: does not correspond to all values in the description!
     thermalPlant = ['Coal', 'CCGT', 'Gas Turbine']
@@ -122,7 +122,7 @@ for i in range(1, 11):
 
 
 print(emissions_variable)
-plt.plot(np.arange(1, 11)*10, emissions_variable)
+plt.plot(np.arange(1, 21)*10, emissions_variable)
 plt.title('Resulting GHG Emissions with increments of 10')
 plt.xlabel('CO2 Price [EUR/tCO2]')
 plt.ylabel('Emissions [tCO2]')
